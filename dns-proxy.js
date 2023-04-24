@@ -10,7 +10,7 @@ const util = require('./util.js')
 
 const defaults = {
   port: 53,
-  host: '127.0.0.1',
+  host: '0.0.0.0',
   logging: 'dnsproxy:query,dnsproxy:info',
   nameservers: [
     '8.8.8.8',
