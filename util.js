@@ -20,6 +20,30 @@ module.exports.listAnswer = function (response) {
   return results.join(', ') || 'nxdomain'
 }
 
+module.exports.sortSRVAnswer = function (response) {
+  const results = []
+  const res = packet.parse(response)
+  
+  res.answer = res.answer.sort(function(a, b) {
+    if ( a.target < b.target ){
+      return -1;
+    }
+    if ( a.target > b.target ){
+      return 1;
+    }
+    return 0;
+  });
+  res.answer.map(function (r) {
+    results.push(r.address || r.data)
+  })
+  
+  const buf = Buffer.alloc(4096)
+  const wrt = packet.write(buf, res)
+  const ret = buf.slice(0, wrt)
+
+  return ret
+}
+
 module.exports.createAnswer = function (query, answer) {
   query.header.qr = 1
   query.header.rd = 1
